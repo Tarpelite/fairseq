@@ -150,9 +150,6 @@ def main(args):
             for i, (id, hypos) in enumerate(zip(batch.ids.tolist(), translations)):
                 src_tokens_i = utils.strip_pad(src_tokens[i], tgt_dict.pad())
                 results.append((start_id + id, src_tokens_i, hypos))
-        
-        if args.output_path:
-            f = open(args.output, "w+", encoding='utf-8')
 
         # sort output to match input order
         for id, src_tokens, hypos in sorted(results, key=lambda x: x[0]):
@@ -181,11 +178,9 @@ def main(args):
                         id,
                         ' '.join(map(lambda x: str(utils.item(x)), alignment))
                     ))
-                if args.output_path:
-                    f.write(hypo_str + "\n")
+
         # update running id counter
         start_id += len(inputs)
-
 
 
 def cli_main():
