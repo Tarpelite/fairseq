@@ -172,20 +172,21 @@ def main(args):
                     remove_bpe=args.remove_bpe,
                 )
                 hypo_str = decode_fn(hypo_str)
-                print('H-{}\t{}\t{}'.format(id, hypo['score'], hypo_str))
-                print('P-{}\t{}'.format(
-                    id,
-                    ' '.join(map(lambda x: '{:.4f}'.format(x), hypo['positional_scores'].tolist()))
-                ))
-                if args.print_alignment:
-                    print('A-{}\t{}'.format(
-                        id,
-                        ' '.join(map(lambda x: str(utils.item(x)), alignment))
-                    ))
+                # print('H-{}\t{}\t{}'.format(id, hypo['score'], hypo_str))
+                # print('P-{}\t{}'.format(
+                #     id,
+                #     ' '.join(map(lambda x: '{:.4f}'.format(x), hypo['positional_scores'].tolist()))
+                # ))
+                # if args.print_alignment:
+                #     print('A-{}\t{}'.format(
+                #         id,
+                #         ' '.join(map(lambda x: str(utils.item(x)), alignment))
+                #     ))
                 if args.output_path:
                     f.write(hypo_str + "\n")
                     cnt += 1
-                    
+        print(results)
+        print(len(results))
         print("line count:", cnt)
         # update running id counter
         start_id += len(inputs)
