@@ -152,7 +152,7 @@ def main(args):
                 results.append((start_id + id, src_tokens_i, hypos))
         
         if args.output_path:
-            f = open(args.output, "w+", encoding='utf-8')
+            f = open(args.output_path, "w+", encoding='utf-8')
 
         # sort output to match input order
         for id, src_tokens, hypos in sorted(results, key=lambda x: x[0]):
