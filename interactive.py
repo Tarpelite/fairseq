@@ -155,6 +155,7 @@ def main(args):
             f = open(args.output_path, "w+", encoding='utf-8')
 
         # sort output to match input order
+        cnt = 0
         for id, src_tokens, hypos in sorted(results, key=lambda x: x[0]):
             if src_dict is not None:
                 src_str = src_dict.string(src_tokens, args.remove_bpe)
@@ -183,6 +184,9 @@ def main(args):
                     ))
                 if args.output_path:
                     f.write(hypo_str + "\n")
+                    cnt += 1
+                    
+        print("line count:", cnt)
         # update running id counter
         start_id += len(inputs)
 
