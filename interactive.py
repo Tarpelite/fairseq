@@ -136,7 +136,9 @@ def main(args):
     
     with open(args.input, 'r', encoding='utf-8') as in_f:
         docs = []
-        for doc in in_f.readlines():
+        for i, doc in enumerate(in_f.readlines()):
+            if i < 4:
+                print(doc)
             doc = doc.strip().lower()
             docs.append(doc)
 
@@ -148,6 +150,7 @@ def main(args):
         res_strs = []
 
         for batch in make_batches(inputs, args, task, max_positions, encode_fn):
+            print(batch)
             src_tokens = batch.src_tokens
             src_lengths = batch.src_lengths
             if use_cuda:
