@@ -152,7 +152,7 @@ def main(args):
         for batch in make_batches(inputs, args, task, max_positions, encode_fn):
             # print(batch)
             src_tokens = batch.src_tokens
-            print(src_tokens)
+            print(src_tokens.shape)
             src_lengths = batch.src_lengths
             if use_cuda:
                 src_tokens = src_tokens.cuda()
