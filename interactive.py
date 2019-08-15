@@ -143,6 +143,7 @@ def main(args):
             
     for inputs in buffered_read(args.input, args.buffer_size):
         results = []
+        res_strs = []
 
         for batch in make_batches(inputs, args, task, max_positions, encode_fn):
             src_tokens = batch.src_tokens
@@ -191,11 +192,14 @@ def main(args):
                 #         id,
                 #         ' '.join(map(lambda x: str(utils.item(x)), alignment))
                 #     ))
+                res_strs.append(hypo_str)
                 if args.output_path:
                     f.write(hypo_str + "\n")
                     cnt += 1
-        print(results)
-        print(len(results))
+        print(res_strs)
+            
+        # print(results)
+        # print(len(results))
         # print("line count:", cnt)
         # update running id counter
         start_id += len(inputs)
