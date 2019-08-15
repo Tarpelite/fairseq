@@ -134,14 +134,16 @@ def main(args):
     if args.output_path:
             f = open(args.output_path, "w+", encoding='utf-8')
     
-    # with open(args.input, 'r', encoding='utf-8') as in_f:
-    #     docs = []
-    #     for doc in in_f.readlines():
-    #         doc = doc.strip().lower()
+    with open(args.input, 'r', encoding='utf-8') as in_f:
+        docs = []
+        for doc in in_f.readlines():
+            doc = doc.strip().lower()
+            docs.append(doc)
 
 
-            
-    for inputs in buffered_read(args.input, args.buffer_size):
+    output_res = []
+    for inputs in docs:
+    # for inputs in buffered_read(args.input, args.buffer_size):
         results = []
         res_strs = []
 
@@ -196,13 +198,14 @@ def main(args):
                 if args.output_path:
                     f.write(hypo_str + "\n")
                     cnt += 1
-        print(res_strs)
+        output_res.append(res_strs)
             
         # print(results)
         # print(len(results))
         # print("line count:", cnt)
         # update running id counter
         start_id += len(inputs)
+    print(len(output_res))
 
 
 def cli_main():
