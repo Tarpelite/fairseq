@@ -131,8 +131,19 @@ def main(args):
         print('| Sentence buffer size:', args.buffer_size)
     print('| Type the input sentence and press return:')
     start_id = 0
+    if args.output_path:
+            f = open(args.output_path, "w+", encoding='utf-8')
+    
+    # with open(args.input, 'r', encoding='utf-8') as in_f:
+    #     docs = []
+    #     for doc in in_f.readlines():
+    #         doc = doc.strip().lower()
+
+
+            
     for inputs in buffered_read(args.input, args.buffer_size):
         results = []
+
         for batch in make_batches(inputs, args, task, max_positions, encode_fn):
             src_tokens = batch.src_tokens
             src_lengths = batch.src_lengths
@@ -151,8 +162,6 @@ def main(args):
                 src_tokens_i = utils.strip_pad(src_tokens[i], tgt_dict.pad())
                 results.append((start_id + id, src_tokens_i, hypos))
         
-        if args.output_path:
-            f = open(args.output_path, "w+", encoding='utf-8')
 
         # sort output to match input order
         cnt = 0
@@ -187,7 +196,7 @@ def main(args):
                     cnt += 1
         print(results)
         print(len(results))
-        print("line count:", cnt)
+        # print("line count:", cnt)
         # update running id counter
         start_id += len(inputs)
 
