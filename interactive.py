@@ -131,6 +131,10 @@ def main(args):
         print('| Sentence buffer size:', args.buffer_size)
     print('| Type the input sentence and press return:')
     start_id = 0
+
+
+
+    results = []
     for inputs in buffered_read(args.input, args.buffer_size):
         results = []
         for batch in make_batches(inputs, args, task, max_positions, encode_fn):
@@ -176,11 +180,19 @@ def main(args):
                 if args.print_alignment:
                     print('A-{}\t{}'.format(
                         id,
-                        ' '.join(map(lambda x: str(utils.item(x)), alignment))
+                       ' '.join(map(lambda x: str(utils.item(x)), alignment))
                     ))
+                results.append(hypo_str)
 
         # update running id counter
         start_id += len(inputs)
+        print(len(results))
+
+        if args.output_path:
+            with open(args.output, "w+", encoding='utf-8') as f:
+                for line in results:
+                    f.write(line + "\n")
+
 
 
 def cli_main():
