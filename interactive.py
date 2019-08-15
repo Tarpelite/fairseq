@@ -151,8 +151,8 @@ def main(args):
 
 
     output_res = []
-    for inputs in docs:
-    # for inputs in buffered_read(args.input, args.buffer_size):
+    # for inputs in docs:
+    for inputs in buffered_read(args.input, args.buffer_size):
         results = []
         res_strs = []
 
