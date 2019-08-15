@@ -150,8 +150,9 @@ def main(args):
         res_strs = []
 
         for batch in make_batches(inputs, args, task, max_positions, encode_fn):
-            print(batch)
+            # print(batch)
             src_tokens = batch.src_tokens
+            print(src_tokens)
             src_lengths = batch.src_lengths
             if use_cuda:
                 src_tokens = src_tokens.cuda()
@@ -174,7 +175,7 @@ def main(args):
         for id, src_tokens, hypos in sorted(results, key=lambda x: x[0]):
             if src_dict is not None:
                 src_str = src_dict.string(src_tokens, args.remove_bpe)
-                print('S-{}\t{}'.format(id, src_str))
+                # print('S-{}\t{}'.format(id, src_str))
 
             # Process top predictions
             for hypo in hypos[:min(len(hypos), args.nbest)]:
