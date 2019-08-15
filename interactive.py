@@ -134,7 +134,7 @@ def main(args):
 
 
 
-    results = []
+    output_strs = []
     for inputs in buffered_read(args.input, args.buffer_size):
         results = []
         for batch in make_batches(inputs, args, task, max_positions, encode_fn):
@@ -172,6 +172,7 @@ def main(args):
                     remove_bpe=args.remove_bpe,
                 )
                 hypo_str = decode_fn(hypo_str)
+                output_strs.append(hypo_str)
                 print('H-{}\t{}\t{}'.format(id, hypo['score'], hypo_str))
                 print('P-{}\t{}'.format(
                     id,
@@ -182,16 +183,16 @@ def main(args):
                         id,
                        ' '.join(map(lambda x: str(utils.item(x)), alignment))
                     ))
-                results.append(hypo_str)
 
         # update running id counter
         start_id += len(inputs)
-        print(len(results))
+    print(len(output_strs))
 
-        if args.output_path:
-            with open(args.output_path, "w+", encoding='utf-8') as f:
-                for line in results:
-                    f.write(line + "\n")
+    if args.output_path:
+        with open(args.output_path, "w+", encoding='utf-8') as f:
+            for line in output_strs:
+                print(line)
+                f.write(line + "\n")
 
 
 
