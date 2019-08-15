@@ -134,18 +134,18 @@ def main(args):
     if args.output_path:
             f = open(args.output_path, "w+", encoding='utf-8')
     
-    with open(args.input, 'r', encoding='utf-8') as in_f:
-        docs = []
-        for i, doc in enumerate(in_f.readlines()):
-            if i < 4:
-                print(doc)
-            doc = doc.strip().lower()
-            doc_split = []
-            cnt = 0
-            for cnt in range(0, len(doc), len(doc) - args.buffer_size):
-                doc_split.append(doc[cnt:cnt + args.buffer_size])
-            doc_split.append(doc[cnt:])
-            docs.append(doc)
+    # with open(args.input, 'r', encoding='utf-8') as in_f:
+    #     docs = []
+    #     for i, doc in enumerate(in_f.readlines()):
+    #         if i < 4:
+    #             print(doc)
+    #         doc = doc.strip().lower()
+    #         doc_split = []
+    #         cnt = 0
+    #         for cnt in range(0, len(doc), len(doc) - args.buffer_size):
+    #             doc_split.append(doc[cnt:cnt + args.buffer_size])
+    #         doc_split.append(doc[cnt:])
+    #         docs.append(doc)
                 
 
 
