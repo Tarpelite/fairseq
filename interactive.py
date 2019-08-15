@@ -189,7 +189,7 @@ def main(args):
         print(len(results))
 
         if args.output_path:
-            with open(args.output, "w+", encoding='utf-8') as f:
+            with open(args.output_path, "w+", encoding='utf-8') as f:
                 for line in results:
                     f.write(line + "\n")
 
