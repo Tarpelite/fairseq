@@ -127,39 +127,14 @@ def main(args):
         *[model.max_positions() for model in models]
     )
 
-    # if args.buffer_size > 1:
-    #     print('| Sentence buffer size:', args.buffer_size)
-    # print('| Type the input sentence and press return:')
+    if args.buffer_size > 1:
+        print('| Sentence buffer size:', args.buffer_size)
+    print('| Type the input sentence and press return:')
     start_id = 0
-    if args.output_path:
-            f = open(args.output_path, "w+", encoding='utf-8')
-    
-    # with open(args.input, 'r', encoding='utf-8') as in_f:
-    #     docs = []
-    #     for i, doc in enumerate(in_f.readlines()):
-    #         if i < 4:
-    #             print(doc)
-    #         doc = doc.strip().lower()
-    #         doc_split = []
-    #         cnt = 0
-    #         for cnt in range(0, len(doc), len(doc) - args.buffer_size):
-    #             doc_split.append(doc[cnt:cnt + args.buffer_size])
-    #         doc_split.append(doc[cnt:])
-    #         docs.append(doc)
-                
-
-
-
-    output_res = []
-    # for inputs in docs:
     for inputs in buffered_read(args.input, args.buffer_size):
         results = []
-        res_strs = []
-
         for batch in make_batches(inputs, args, task, max_positions, encode_fn):
-            # print(batch)
             src_tokens = batch.src_tokens
-            # print(src_tokens.shape)
             src_lengths = batch.src_lengths
             if use_cuda:
                 src_tokens = src_tokens.cuda()
@@ -175,14 +150,12 @@ def main(args):
             for i, (id, hypos) in enumerate(zip(batch.ids.tolist(), translations)):
                 src_tokens_i = utils.strip_pad(src_tokens[i], tgt_dict.pad())
                 results.append((start_id + id, src_tokens_i, hypos))
-        
 
         # sort output to match input order
-        cnt = 0
         for id, src_tokens, hypos in sorted(results, key=lambda x: x[0]):
             if src_dict is not None:
                 src_str = src_dict.string(src_tokens, args.remove_bpe)
-                # print('S-{}\t{}'.format(id, src_str))
+                print('S-{}\t{}'.format(id, src_str))
 
             # Process top predictions
             for hypo in hypos[:min(len(hypos), args.nbest)]:
@@ -195,28 +168,19 @@ def main(args):
                     remove_bpe=args.remove_bpe,
                 )
                 hypo_str = decode_fn(hypo_str)
-                # print('H-{}\t{}\t{}'.format(id, hypo['score'], hypo_str))
-                # print('P-{}\t{}'.format(
-                #     id,
-                #     ' '.join(map(lambda x: '{:.4f}'.format(x), hypo['positional_scores'].tolist()))
-                # ))
-                # if args.print_alignment:
-                #     print('A-{}\t{}'.format(
-                #         id,
-                #         ' '.join(map(lambda x: str(utils.item(x)), alignment))
-                #     ))
-                res_strs.append(hypo_str)
-                if args.output_path:
-                    f.write(hypo_str + "\n")
-                    cnt += 1
-        output_res.append(res_strs)
-            
-        # print(results)
-        # print(len(results))
-        # print("line count:", cnt)
+                print('H-{}\t{}\t{}'.format(id, hypo['score'], hypo_str))
+                print('P-{}\t{}'.format(
+                    id,
+                    ' '.join(map(lambda x: '{:.4f}'.format(x), hypo['positional_scores'].tolist()))
+                ))
+                if args.print_alignment:
+                    print('A-{}\t{}'.format(
+                        id,
+                        ' '.join(map(lambda x: str(utils.item(x)), alignment))
+                    ))
+
         # update running id counter
         start_id += len(inputs)
-    print(len(output_res))
 
 
 def cli_main():
