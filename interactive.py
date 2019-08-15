@@ -127,9 +127,9 @@ def main(args):
         *[model.max_positions() for model in models]
     )
 
-    if args.buffer_size > 1:
-        print('| Sentence buffer size:', args.buffer_size)
-    print('| Type the input sentence and press return:')
+    # if args.buffer_size > 1:
+    #     print('| Sentence buffer size:', args.buffer_size)
+    # print('| Type the input sentence and press return:')
     start_id = 0
     if args.output_path:
             f = open(args.output_path, "w+", encoding='utf-8')
@@ -140,7 +140,14 @@ def main(args):
             if i < 4:
                 print(doc)
             doc = doc.strip().lower()
+            doc_split = []
+            cnt = 0
+            for cnt in range(0, len(doc), len(doc) - args.buffer_size):
+                doc_split.append(doc[cnt:cnt + args.buffer_size])
+            doc_split.append(doc[cnt:])
             docs.append(doc)
+                
+
 
 
     output_res = []
